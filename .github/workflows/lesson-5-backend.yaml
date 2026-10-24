@@ -5,7 +5,18 @@ on:
     branches:
       - lesson-5
 jobs:
+  security_test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    name: Run pycharm security test
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Run pycharm security test
+        uses: tonybaloney/pycharm-security@1.25.1
   unit_test:
+    needs: [security_test]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -15,7 +26,7 @@ jobs:
       - name: Set up Python 3.10
         uses: actions/setup-python@v7
         with:
-          python-version: '3.10'
+          python-version: "3.10"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -34,5 +45,5 @@ jobs:
       - uses: actions/checkout@v7.0.1
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
-      - name: '**PLACEHOLDER** Deploy to Elastic Beanstalk'
+      - name: "**PLACEHOLDER** Deploy to Elastic Beanstalk"
         run: echo Placeholder for Deployment
